@@ -42,7 +42,7 @@ will swap MSB and LSB of Rn
 	ADDR2TIMES:
 	    ADD R0, R1			;R0 + R1 = R1
 	    DEC R2				;Decrement R2 1 time
-	    BNE R2, ADD16TIMES	;If R2 not equal to zero
+	    BNE R2, ADDR2TIMES	;If R2 not equal to zero
 	END:
 	    RET					;Return to 6502 mode
 
