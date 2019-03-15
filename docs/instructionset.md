@@ -1,4 +1,4 @@
 ## Instruction Set Documents
 
-[Instruction Set Table](VIRTUAL16 Instruction Set Table.pdf)  
-[Instruction Set Detailed](VIRTUAL16 Instruction Set.pdf)  
+[Instruction Set Table](VIRTUAL16_Instruction_Set_Table.pdf)  
+[Instruction Set Detailed](VIRTUAL16_Instruction_Set.pdf)  
