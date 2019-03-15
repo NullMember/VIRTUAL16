@@ -40,13 +40,13 @@ will swap MSB and LSB of Rn
 	    JSR ADDR2TIMES		;JUMP ADDR2TIMES subroutine
 	    JMP END				;JUMP to RET
 	ADDR2TIMES:
-		ADD R0, R1			;R0 + R1 = R1
-		DEC R2				;Decrement R2 1 time
-		BNE R2, ADD16TIMES	;If R2 not equal to zero
+	    ADD R0, R1			;R0 + R1 = R1
+	    DEC R2				;Decrement R2 1 time
+	    BNE R2, ADD16TIMES	;If R2 not equal to zero
 	END:
-		RET					;Return to 6502 mode
+	    RET					;Return to 6502 mode
 
-If you want to assemble your program by hand go to [isa.md](isa.md)
+If you want to assemble your program by hand go to [Instruction Set](instructionset.md)
 
 ## Placing VIRTUAL16 program into 6502 program
 
@@ -54,11 +54,11 @@ For placing your program into 6502 source you must assemble and place bytecodes 
 
     .org 0x0200
     VIRTUAL16 equ 0x0400
-     
+    
     MAIN:
 	    JSR VIRTUAL16
 	    DB 0x40, 0x10, 0x00, 0x41, 0x10, 0x00, 0x42, 0x10, 0x00, 0x0d, 0x15, 0x00, 0x42, 0x20, 0x00, 0x0d
-		DB 0x15, 0x00, 0x0f, 0x1b, 0x00, 0x12, 0x01, 0x11, 0x20, 0x82, 0xfa, 0x00
-		BRK
+	    DB 0x15, 0x00, 0x0f, 0x1b, 0x00, 0x12, 0x01, 0x11, 0x20, 0x82, 0xfa, 0x00
+	    BRK
 
 These bytecodes contain the example above.
