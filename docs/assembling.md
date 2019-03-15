@@ -1,5 +1,5 @@
 # Writing VIRTUAL16 program
-Writing VIRTUAL16 program is not different from writing another assembly program. Since VIRTUAL16 is virtual there are small limitations.  
+Writing VIRTUAL16 program is not different from writing assembly program for another architecture. Since VIRTUAL16 is virtual there are small limitations.  
 This document written for using suggested way of assembling VIRTUAL16 program (for more information go to [README](../README.md))
 
 ### Never use .ORG statement
@@ -28,6 +28,9 @@ will swap contents of Rn and Rm . Second one is
 
     SWAP Rn
 will swap MSB and LSB of Rn
+
+### SMUL and UMUL
+SMUL and UMUL instructions are 16x16=32-bit and result held by R12 and R13
 
 ## Example
 
