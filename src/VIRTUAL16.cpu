@@ -45,23 +45,25 @@
 	
 	RET								-> 0x00
 	MOV  {src: reg}, {dst: reg}		-> 0x01 @ src[3:0] @ dst[3:0]
-	MOV  @{src}, {dst: reg}			-> 0x02 @ src[3:0] @ dst[3:0]
-	MOV	 {src: reg}, @{dst}			-> 0x03 @ src[3:0] @ dst[3:0]
-	MOV  +@{src}, {dst: reg}		-> 0x04 @ src[3:0] @ dst[3:0]
-	MOV  {src: reg}, +@{dst}		-> 0x05 @ src[3:0] @ dst[3:0]
+	MOV  @{src: reg}, {dst: reg}	-> 0x02 @ src[3:0] @ dst[3:0]
+	MOV	 {src: reg}, @{dst: reg}	-> 0x03 @ src[3:0] @ dst[3:0]
+	MOV  +@{src: reg}, {dst: reg}	-> 0x04 @ src[3:0] @ dst[3:0]
+	MOV  {src: reg}, +@{dst: reg}	-> 0x05 @ src[3:0] @ dst[3:0]
 	PUSH {reg: reg}					-> 0x06 @ reg[3:0] @ 0[3:0]
 	POP  {reg: reg}					-> 0x07 @ reg[3:0] @ 0[3:0]
 	CLR  {reg: reg}					-> 0x08 @ reg[3:0] @ 0[3:0]
 	SWAP {src: reg}, {dst: reg} 	-> 0x09 @ src[3:0] @ dst[3:0]
 	SWAP {reg: reg}		 			-> 0x09 @ reg[3:0] @ reg[3:0]
 	AND  {src: reg}, {dst: reg}		-> 0x0A @ src[3:0] @ dst[3:0]
-	IOR  {src: reg}, {dst: reg}		-> 0x0B @ src[3:0] @ dst[3:0]
+	OR   {src: reg}, {dst: reg}		-> 0x0B @ src[3:0] @ dst[3:0]
 	XOR  {src: reg}, {dst: reg}		-> 0x0C @ src[3:0] @ dst[3:0]
 	JSR	 {label}					-> 0x0D @ label[7:0] @ label[15:8]
 	RTS								-> 0x0E
 	JMP	 {label}					-> 0x0F @ label[7:0] @ label[15:8]
 	INC  {dst: reg}, #{count}		-> 0x10 @ dst[3:0] @ count[3:0]
+	INC  {dst: reg}					-> 0x10 @ dst[3:0] @ 0[3:0]
 	DEC  {dst: reg}, #{count}		-> 0x11 @ dst[3:0] @ count[3:0]
+	DEC  {dst: reg}					-> 0x11 @ dst[3:0] @ 0[3:0]
 	ADD  {src: reg}, {dst: reg}		-> 0x12 @ src[3:0] @ dst[3:0]
 	ADC  {src: reg}, {dst: reg}		-> 0x13 @ src[3:0] @ dst[3:0]
 	SUB  {src: reg}, {dst: reg}		-> 0x14 @ src[3:0] @ dst[3:0]
@@ -69,13 +71,21 @@
 	SMUL {src: reg}, {dst: reg}		-> 0x16 @ src[3:0] @ dst[3:0]
 	UMUL {src: reg}, {dst: reg}		-> 0x17 @ src[3:0] @ dst[3:0]
 	ASL  {dst: reg}, #{count}		-> 0x18 @ dst[3:0] @ count[3:0]
+	ASL  {dst: reg}					-> 0x18 @ dst[3:0] @ 0[3:0]
 	ASR  {dst: reg}, #{count}		-> 0x19 @ dst[3:0] @ count[3:0]
+	ASR  {dst: reg}					-> 0x19 @ dst[3:0] @ 0[3:0]
 	LSL  {dst: reg}, #{count}		-> 0x1A @ dst[3:0] @ count[3:0]
+	LSL  {dst: reg}					-> 0x1A @ dst[3:0] @ 0[3:0]
 	LSR  {dst: reg}, #{count}		-> 0x1B @ dst[3:0] @ count[3:0]
+	LSR  {dst: reg}					-> 0x1B @ dst[3:0] @ 0[3:0]
 	ROL  {dst: reg}, #{count}		-> 0x1C @ dst[3:0] @ count[3:0]
+	ROL  {dst: reg}					-> 0x1C @ dst[3:0] @ 0[3:0]
 	RLC  {dst: reg}, #{count}		-> 0x1D @ dst[3:0] @ count[3:0]
+	RLC  {dst: reg}					-> 0x1D @ dst[3:0] @ 0[3:0]
 	ROR  {dst: reg}, #{count}		-> 0x1E @ dst[3:0] @ count[3:0]
+	ROR  {dst: reg}					-> 0x1E @ dst[3:0] @ 0[3:0]
 	RRC  {dst: reg}, #{count}		-> 0x1F @ dst[3:0] @ count[3:0]
+	RRC  {dst: reg}					-> 0x1F @ dst[3:0] @ 0[3:0]
 	MOVL #{value}, {dst: reg}		-> 0x2	@ dst[3:0] @ value[7:0]
 	MOVH #{value}, {dst: reg}		-> 0x3	@ dst[3:0] @ value[7:0]
 	MOV  #{value}, {dst: reg}		-> 0x4	@ dst[3:0] @ value[7:0] @ value[15:8]
@@ -145,3 +155,11 @@
 	MOV	{label}, {reg: reg}			-> 0xE @ reg[3:0] @ label[7:0] @ label[15:8]
 	MOV	{reg: reg}, {label}			-> 0xF @ reg[3:0] @ label[7:0] @ label[15:8]
 }
+
+MAIN:
+;WRITE YOUR PROGRAM BETWEEN THESE LINES
+	
+;WRITE YOUR PROGRAM BETWEEN THESE LINES
+;MAKE SURE LAST INSTRUCTION IS RET
+END:
+	RET
