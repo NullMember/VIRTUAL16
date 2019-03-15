@@ -24,7 +24,7 @@ You can use these instructions without #COUNT for inc, dec or shift 1 time.
 SWAP instruction have two different usage. First one is
 
     SWAP Rn, Rm
-will swap Rn and Rm contents. Second one is
+will swap contents of Rn and Rm . Second one is
 
     SWAP Rn
 will swap MSB and LSB of Rn

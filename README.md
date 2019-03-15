@@ -4,7 +4,7 @@ If you want to assemble [src/VIRTUAL16.asm](src/VIRTUAL16.asm) file you can use 
 For assembling your own VIRTUAL16 code copy contents of [src/VIRTUAL16.cpu](src/VIRTUAL16.cpu) and paste it to [here](https://hlorenzi.github.io/customasm/web/)  
 
 ## Documents
-Please check [docs/docs.md](docs/docs.md) for more information  
+Please check [docs folder](docs) for more information  
 
 ## TODO
 More documentation  
