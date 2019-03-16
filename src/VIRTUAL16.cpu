@@ -41,6 +41,11 @@
         R13 = 13
         R14 = 14
         R15 = 15
+        ML = 11
+        MH = 12
+        CR = 13
+        SR = 14
+        PC = 15
     }
 	
 	RET								-> 0x00
@@ -51,7 +56,7 @@
 	MOV  {src: reg}, +@{dst: reg}	-> 0x05 @ src[3:0] @ dst[3:0]
 	PUSH {reg: reg}					-> 0x06 @ reg[3:0] @ 0[3:0]
 	POP  {reg: reg}					-> 0x07 @ reg[3:0] @ 0[3:0]
-	CLR  {reg: reg}					-> 0x08 @ reg[3:0] @ 0[3:0]
+	CMP  {reg: reg}, {dst: reg}		-> 0x08 @ reg[3:0] @ dst[3:0]
 	SWAP {src: reg}, {dst: reg} 	-> 0x09 @ src[3:0] @ dst[3:0]
 	SWAP {reg: reg}		 			-> 0x09 @ reg[3:0] @ reg[3:0]
 	AND  {src: reg}, {dst: reg}		-> 0x0A @ src[3:0] @ dst[3:0]
@@ -70,8 +75,7 @@
 	SBC  {src: reg}, {dst: reg}		-> 0x15 @ src[3:0] @ dst[3:0]
 	SMUL {src: reg}, {dst: reg}		-> 0x16 @ src[3:0] @ dst[3:0]
 	UMUL {src: reg}, {dst: reg}		-> 0x17 @ src[3:0] @ dst[3:0]
-	ASL  {dst: reg}, #{count}		-> 0x18 @ dst[3:0] @ count[3:0]
-	ASL  {dst: reg}					-> 0x18 @ dst[3:0] @ 0[3:0]
+	RJSR {label}					-> 0x18 @ label[7:0] @ label[15:8]
 	ASR  {dst: reg}, #{count}		-> 0x19 @ dst[3:0] @ count[3:0]
 	ASR  {dst: reg}					-> 0x19 @ dst[3:0] @ 0[3:0]
 	LSL  {dst: reg}, #{count}		-> 0x1A @ dst[3:0] @ count[3:0]
@@ -155,11 +159,3 @@
 	MOV	{label}, {reg: reg}			-> 0xE @ reg[3:0] @ label[7:0] @ label[15:8]
 	MOV	{reg: reg}, {label}			-> 0xF @ reg[3:0] @ label[7:0] @ label[15:8]
 }
-
-MAIN:
-;WRITE YOUR PROGRAM BETWEEN THESE LINES
-	
-;WRITE YOUR PROGRAM BETWEEN THESE LINES
-;MAKE SURE LAST INSTRUCTION IS RET
-END:
-	RET
