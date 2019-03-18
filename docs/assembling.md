@@ -3,12 +3,12 @@ Writing VIRTUAL16 program is not different from writing assembly program for ano
 This document written for using suggested way of assembling VIRTUAL16 program (for more information go to [README](../README.md))
 
 ### Never use .ORG statement
-VIRTUAL16 have JMP and JSR instructions. You can write subroutines in your program and call them in VIRTUAL16 mode. JMP and JSR instruction calculates real location while executing instruction. If you use .org, calculation result is probably wrong. So never use .org statement.  
+VIRTUAL16 have JMP and JSR instructions. You can write subroutines in your program and call them in VIRTUAL16 mode. JMP and JSR instruction calculates real location while executing instruction. If you use .org, calculation result is probably wrong. So never use .org statement for VIRTUAL16 program. You can use .org statement for 6502 routine  
 
 ### RET instruction must always last instruction
 RET instruction returns from VIRTUAL16. Instruction fetchs last PC from VIRTUAL16 program counter and return 6502 mode. If you place RET instruction between another VIRTUAL16 instructions return address will wrong.
 
-### For INC, DEC, ASL, ASR, LSL, LSR, ROR, RRC, ROL, RLC instructions use (#COUNT - 1)
+### For INC, DEC, ASR, LSL, LSR, ROR, RRC, ROL, RLC instructions use (#COUNT - 1)
 VIRTUAL16 supports incrementing, decrementing and shifting register multiple times in 1 instruction. For technical limitations #count must be 4-bit. Since inc, dec or shift 0 times is meaningless and word width is 16-bit I decided to use #COUNT + 1 while executing instruction. So if you write
 
     INC R0, #0
@@ -30,7 +30,9 @@ will swap contents of Rn and Rm . Second one is
 will swap MSB and LSB of Rn
 
 ### SMUL and UMUL
-SMUL and UMUL instructions are 16x16=32-bit and result held by R12 and R13
+SMUL and UMUL instructions are 16x16=32-bit and result held by R11 and R12
+
+### 
 
 ## Example
 
