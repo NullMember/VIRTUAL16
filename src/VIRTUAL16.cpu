@@ -75,7 +75,7 @@
 	SBC  {src: reg}, {dst: reg}		-> 0x15 @ src[3:0] @ dst[3:0]
 	SMUL {src: reg}, {dst: reg}		-> 0x16 @ src[3:0] @ dst[3:0]
 	UMUL {src: reg}, {dst: reg}		-> 0x17 @ src[3:0] @ dst[3:0]
-	RJSR {label}					-> 0x18 @ label[7:0] @ label[15:8]
+	NJSR {label}					-> 0x18 @ label[7:0] @ label[15:8]
 	ASR  {dst: reg}, #{count}		-> 0x19 @ dst[3:0] @ count[3:0]
 	ASR  {dst: reg}					-> 0x19 @ dst[3:0] @ 0[3:0]
 	LSL  {dst: reg}, #{count}		-> 0x1A @ dst[3:0] @ count[3:0]
@@ -93,47 +93,47 @@
 	MOVL #{value}, {dst: reg}		-> 0x2	@ dst[3:0] @ value[7:0]
 	MOVH #{value}, {dst: reg}		-> 0x3	@ dst[3:0] @ value[7:0]
 	MOV  #{value}, {dst: reg}		-> 0x4	@ dst[3:0] @ value[7:0] @ value[15:8]
-	BPL	 {dst: reg}, {label}		->
+	BNM1 {dst: reg}, {label}		->
 	{
 		reladdr = label - pc - 2
 		assert(reladdr <=  0x7f)
 		assert(reladdr >= !0x7f)
 		0x5 @ dst[3:0] @ reladdr[7:0]
 	}
-	BMI	 {dst: reg}, {label}		->
+	BM1	 {dst: reg}, {label}		->
 	{
 		reladdr = label - pc - 2
 		assert(reladdr <=  0x7f)
 		assert(reladdr >= !0x7f)
 		0x6 @ dst[3:0] @ reladdr[7:0]
 	}
-	BEQ	 {dst: reg}, {label}		->
+	BMI	 {dst: reg}, {label}		->
 	{
 		reladdr = label - pc - 2
 		assert(reladdr <=  0x7f)
 		assert(reladdr >= !0x7f)
 		0x7 @ dst[3:0] @ reladdr[7:0]
 	}
-	BNE	 {dst: reg}, {label}		->
+	BPL	 {dst: reg}, {label}		->
 	{
 		reladdr = label - pc - 2
 		assert(reladdr <=  0x7f)
 		assert(reladdr >= !0x7f)
 		0x8 @ dst[3:0] @ reladdr[7:0]
 	}
-	BM1	 {dst: reg}, {label}		->
+	BCC	{label}						->
 	{
 		reladdr = label - pc - 2
 		assert(reladdr <=  0x7f)
 		assert(reladdr >= !0x7f)
-		0x9 @ dst[3:0] @ reladdr[7:0]
+		0x90 @ reladdr[7:0]
 	}
-	BNM1 {dst: reg}, {label}		->
+	BCS	{label}						->
 	{
 		reladdr = label - pc - 2
 		assert(reladdr <=  0x7f)
 		assert(reladdr >= !0x7f)
-		0xA @ dst[3:0] @ reladdr[7:0]
+		0xA0 @ reladdr[7:0]
 	}
 	BRA	{label}						->
 	{
@@ -142,19 +142,19 @@
 		assert(reladdr >= !0x7f)
 		0xB0 @ reladdr[7:0]
 	}
-	BCS	{label}						->
+	BNE	 {dst: reg}, {label}		->
 	{
 		reladdr = label - pc - 2
 		assert(reladdr <=  0x7f)
 		assert(reladdr >= !0x7f)
-		0xC0 @ reladdr[7:0]
+		0xC @ dst[3:0] @ reladdr[7:0]
 	}
-	BCC	{label}						->
+	BEQ	 {dst: reg}, {label}		->
 	{
 		reladdr = label - pc - 2
 		assert(reladdr <=  0x7f)
 		assert(reladdr >= !0x7f)
-		0xD0 @ reladdr[7:0]
+		0xD @ dst[3:0] @ reladdr[7:0]
 	}
 	MOV	{label}, {reg: reg}			-> 0xE @ reg[3:0] @ label[7:0] @ label[15:8]
 	MOV	{reg: reg}, {label}			-> 0xF @ reg[3:0] @ label[7:0] @ label[15:8]
