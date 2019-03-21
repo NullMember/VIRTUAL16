@@ -21,25 +21,20 @@ You can use these instructions without #COUNT for inc, dec or shift 1 time.
     INC R0
 
 ### SWAP instruction usage
-SWAP instruction have two different usage. First one is
+SWAP instruction have two different usage. First one is  
 
     SWAP Rn, Rm
-will swap contents of Rn and Rm . Second one is
+will swap contents of Rn and Rm . Second one is  
 
     SWAP Rn
-will swap MSB and LSB of Rn
-
-### SMUL and UMUL
-SMUL and UMUL instructions are 16x16=32-bit and result held by R11 and R12
-
-### 
+will swap MSB and LSB of Rn  
 
 ## Example
 
     MAIN:
 	    MOV #0x0010, R0		;MOV 16 to R0
-	    MOV #0x0010, R1		;MOV 16 to R1
-	    MOV #0x0010, R2		;MOV 16 to R2
+	    MOV R0, R1			;COPY 16 TO R1
+	    MOV R0, R2			;COPY 16 TO R2
 	    JSR ADDR2TIMES		;JUMP ADDR2TIMES subroutine
 	    MOV #0x0020, R2		;MOV 32 to R2
 	    JSR ADDR2TIMES		;JUMP ADDR2TIMES subroutine
@@ -62,7 +57,7 @@ For placing your program into 6502 source you must assemble and place bytecodes 
     
     MAIN:
 	    JSR VIRTUAL16
-	    DB 0x40, 0x10, 0x00, 0x41, 0x10, 0x00, 0x42, 0x10, 0x00, 0x0d, 0x15, 0x00, 0x42, 0x20, 0x00, 0x0d
+	    DB 0x40, 0x10, 0x00, 0x10, 0x01, 0x10, 0x02, 0x0d, 0x15, 0x00, 0x42, 0x20, 0x00, 0x0d
 	    DB 0x15, 0x00, 0x0f, 0x1b, 0x00, 0x12, 0x01, 0x11, 0x20, 0x82, 0xfa, 0x00
 	    BRK
 
