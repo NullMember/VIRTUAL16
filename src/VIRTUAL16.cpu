@@ -90,72 +90,76 @@
 	ROR  {dst: reg}					-> 0x1E @ dst[3:0] @ 0[3:0]
 	RRC  {dst: reg}, #{count}		-> 0x1F @ dst[3:0] @ count[3:0]
 	RRC  {dst: reg}					-> 0x1F @ dst[3:0] @ 0[3:0]
-	MOVL #{value}, {dst: reg}		-> 0x2	@ dst[3:0] @ value[7:0]
-	MOVH #{value}, {dst: reg}		-> 0x3	@ dst[3:0] @ value[7:0]
-	MOV  #{value}, {dst: reg}		-> 0x4	@ dst[3:0] @ value[7:0] @ value[15:8]
-	BNM1 {dst: reg}, {label}		->
-	{
-		reladdr = label - pc - 2
-		assert(reladdr <=  0x7f)
-		assert(reladdr >= !0x7f)
-		0x5 @ dst[3:0] @ reladdr[7:0]
-	}
-	BM1	 {dst: reg}, {label}		->
-	{
-		reladdr = label - pc - 2
-		assert(reladdr <=  0x7f)
-		assert(reladdr >= !0x7f)
-		0x6 @ dst[3:0] @ reladdr[7:0]
-	}
-	BMI	 {dst: reg}, {label}		->
-	{
-		reladdr = label - pc - 2
-		assert(reladdr <=  0x7f)
-		assert(reladdr >= !0x7f)
-		0x7 @ dst[3:0] @ reladdr[7:0]
-	}
-	BPL	 {dst: reg}, {label}		->
-	{
-		reladdr = label - pc - 2
-		assert(reladdr <=  0x7f)
-		assert(reladdr >= !0x7f)
-		0x8 @ dst[3:0] @ reladdr[7:0]
-	}
 	BCC	{label}						->
 	{
 		reladdr = label - pc - 2
 		assert(reladdr <=  0x7f)
 		assert(reladdr >= !0x7f)
-		0x90 @ reladdr[7:0]
+		0x20 @ reladdr[7:0]
 	}
 	BCS	{label}						->
 	{
 		reladdr = label - pc - 2
 		assert(reladdr <=  0x7f)
 		assert(reladdr >= !0x7f)
-		0xA0 @ reladdr[7:0]
+		0x21 @ reladdr[7:0]
 	}
 	BRA	{label}						->
 	{
 		reladdr = label - pc - 2
 		assert(reladdr <=  0x7f)
 		assert(reladdr >= !0x7f)
-		0xB0 @ reladdr[7:0]
+		0x22 @ reladdr[7:0]
 	}
-	BNE	 {dst: reg}, {label}		->
+	INTC #{value}					-> 0x23 @ value[7:0]
+	INTA {reg: reg}					-> 0x24 @ reg[3:0] @ 0[3:0]
+	JMPR {reg: reg}					-> 0x25 @ reg[3:0] @ 15[3:0]
+	RETI							-> 0x26
+	MOVL #{value}, {dst: reg}		-> 0x5	@ dst[3:0] @ value[7:0]
+	MOVH #{value}, {dst: reg}		-> 0x6	@ dst[3:0] @ value[7:0]
+	MOV  #{value}, {dst: reg}		-> 0x7	@ dst[3:0] @ value[7:0] @ value[15:8]
+	MOV	{label}, {reg: reg}			-> 0x8 @ reg[3:0] @ label[7:0] @ label[15:8]
+	MOV	{reg: reg}, {label}			-> 0x9 @ reg[3:0] @ label[7:0] @ label[15:8]
+	BNM1 {dst: reg}, {label}		->
+	{
+		reladdr = label - pc - 2
+		assert(reladdr <=  0x7f)
+		assert(reladdr >= !0x7f)
+		0xA @ dst[3:0] @ reladdr[7:0]
+	}
+	BM1	 {dst: reg}, {label}		->
+	{
+		reladdr = label - pc - 2
+		assert(reladdr <=  0x7f)
+		assert(reladdr >= !0x7f)
+		0xB @ dst[3:0] @ reladdr[7:0]
+	}
+	BMI	 {dst: reg}, {label}		->
 	{
 		reladdr = label - pc - 2
 		assert(reladdr <=  0x7f)
 		assert(reladdr >= !0x7f)
 		0xC @ dst[3:0] @ reladdr[7:0]
 	}
-	BEQ	 {dst: reg}, {label}		->
+	BPL	 {dst: reg}, {label}		->
 	{
 		reladdr = label - pc - 2
 		assert(reladdr <=  0x7f)
 		assert(reladdr >= !0x7f)
 		0xD @ dst[3:0] @ reladdr[7:0]
 	}
-	MOV	{label}, {reg: reg}			-> 0xE @ reg[3:0] @ label[7:0] @ label[15:8]
-	MOV	{reg: reg}, {label}			-> 0xF @ reg[3:0] @ label[7:0] @ label[15:8]
+	BNE	 {dst: reg}, {label}		->
+	{
+		reladdr = label - pc - 2
+		assert(reladdr <=  0x7f)
+		assert(reladdr >= !0x7f)
+		0xE @ dst[3:0] @ reladdr[7:0]
+	}
+	BEQ	 {dst: reg}, {label}		->
+	{
+		reladdr = label - pc - 2
+		assert(reladdr <=  0x7f)
+		assert(reladdr >= !0x7f)
+		0xF @ dst[3:0] @ reladdr[7:0]
+	}
 }

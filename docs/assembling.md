@@ -2,8 +2,12 @@
 Writing VIRTUAL16 program is not different from writing assembly program for another architecture. Since VIRTUAL16 is virtual there are small limitations.  
 This document written for using suggested way of assembling VIRTUAL16 program (for more information go to [README](../README.md))
 
+### Program Counter, Status Register and Stack Pointer
+
+VIRTUAL16 uses highest registers for fixed-purpose. R15 stores PC, LSB of R14 stores SR and MSB of R14 stores SP. Don't write to these registers unless you know what you do!  
+
 ### Never use .ORG statement
-VIRTUAL16 have JMP and JSR instructions. You can write subroutines in your program and call them in VIRTUAL16 mode. JMP and JSR instruction calculates real location while executing instruction. If you use .org, calculation result is probably wrong. So never use .org statement for VIRTUAL16 program. You can use .org statement for 6502 routine  
+VIRTUAL16 have JMP and JSR instructions. You can write VIRTUAL16 subroutines in your program. JMP and JSR instruction calculates real location while executing instruction. If you use .org, calculation result is probably wrong. So never use .org statement for VIRTUAL16 program. You can use .org statement for 6502 routine  
 
 ### RET instruction must always last instruction
 RET instruction returns from VIRTUAL16. Instruction fetchs last PC from VIRTUAL16 program counter and return 6502 mode. If you place RET instruction between another VIRTUAL16 instructions return address will wrong.
@@ -29,6 +33,16 @@ will swap contents of Rn and Rm . Second one is
     SWAP Rn
 will swap MSB and LSB of Rn  
 
+### UMUL, SMUL and CMP instruction result registers
+
+UMUL and SMUL instructions uses R12(LSW) and R13(MSW) for result. If you use these instructions R12 and R13 content will replaced by instructions.  
+CMP instruction uses R13 for result.  
+Otherwise you are free to use these registers.  
+
+### NJSR instruction
+
+With NJSR (Native Jump SubRoutine) instruction you can execute native 6502 subroutine without returning from VIRTUAL16 mode. Make sure your subroutine ends with RTS instruction.  
+
 ## Example
 
     MAIN:
@@ -52,13 +66,12 @@ If you want to assemble your program by hand go to [Instruction Set](instruction
 
 For placing your program into 6502 source you must assemble and place bytecodes after "JSR VIRTUAL16". For example:  
 
-    .org 0x0200
-    VIRTUAL16 equ 0x0400
-    
-    MAIN:
-	    JSR VIRTUAL16
-	    DB 0x40, 0x10, 0x00, 0x10, 0x01, 0x10, 0x02, 0x0d, 0x15, 0x00, 0x42, 0x20, 0x00, 0x0d
-	    DB 0x15, 0x00, 0x0f, 0x1b, 0x00, 0x12, 0x01, 0x11, 0x20, 0x82, 0xfa, 0x00
-	    BRK
+	.ORG 0x0200
+	
+	MAIN:
+		JSR VIRTUAL16
+		DB 0x40, 0x10, 0x00, 0x01, 0x01, 0x01, 0x02, 0x0d, 0x13, 0x00, 0x42, 0x20, 0x00, 0x0d, 0x13, 0x00
+		DB 0x0f, 0x19, 0x00, 0x12, 0x01, 0x11, 0x20, 0xc2, 0xfa, 0x00
+		BRK
 
 These bytecodes contain the example above.
