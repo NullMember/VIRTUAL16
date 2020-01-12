@@ -111,10 +111,8 @@
 		assert(reladdr >= !0x7f)
 		0x22 @ reladdr[7:0]
 	}
-	INTC #{value}					-> 0x23 @ value[7:0]
-	INTA {reg: reg}					-> 0x24 @ reg[3:0] @ 0[3:0]
-	JMPR {reg: reg}					-> 0x25 @ reg[3:0] @ 15[3:0]
-	RETI							-> 0x26
+	JMPR {reg: reg}					-> 0x23 @ reg[3:0] @ 15[3:0]
+	RETI							-> 0x24
 	MOVL #{value}, {dst: reg}		-> 0x5	@ dst[3:0] @ value[7:0]
 	MOVH #{value}, {dst: reg}		-> 0x6	@ dst[3:0] @ value[7:0]
 	MOV  #{value}, {dst: reg}		-> 0x7	@ dst[3:0] @ value[7:0] @ value[15:8]
