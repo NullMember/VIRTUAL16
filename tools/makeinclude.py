@@ -1,6 +1,7 @@
 import os, sys, time
 
-instructions = ['INSADD', 'INSADC', 'INSCMP', 'INSSUB', 'INSSBC', 'INSSWAP', 'INSUMUL', 'INSSMUL', 'INSAND', 'INSOR', 'INSXOR', 'INSASL', 'INSLSL', 'INSASR', 'INSLSR', 'INSROL', 'INSRLC', 'INSROR', 'INSRRC', 'INSINC', 'INSDEC']
+instructions = ['INSADD', 'INSADC', 'INSSUB', 'INSSBC', 'INSSWAP', 'INSUMUL', 'INSSMUL', 'INSAND', 'INSOR', 'INSXOR', 'INSASLLOOP', 'INSASLLOOP', 'INSASRTEST', 'INSLSRLOOP', 'INSROLLOOP', 'INSRORLOOP', 'INSINCREMENT', 'INSDECREMENT']
+names = ['ADD16', 'ADC16', 'SUB16', 'SBC16', 'SWAP16', 'UMUL16', 'SMUL16', 'AND16', 'OR16', 'XOR16', 'ASL16', 'LSL16', 'ASR16', 'LSR16', 'RLC16', 'RRC16', 'INC16', 'DEC16']
 addresses = []
 
 if os.path.exists('..\\output\\VIRTUAL16.lst'):
@@ -13,11 +14,13 @@ else:
 for line in lines:
     try:
         if line.split()[0] in instructions:
-            address = line.split()[1]
-            address = '0x' + address
-            addresses.append('.equ ' + line.split()[0] + ' ' + address)
+            _index = instructions.index(line.split()[0])
+            address = int(line.split()[1], 16)
+            addresses.append('.equ ' + names[_index] + ' ' + hex(address))
     except:
         pass
+
+print(addresses)
 
 with open('..\\src\\VIRTUAL16.inc', 'w') as f:
     for address in addresses:
