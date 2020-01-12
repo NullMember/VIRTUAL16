@@ -1,7 +1,7 @@
 # VIRTUAL16
 16-bit virtual microprocessor implemented in MOS6502 assembly, inspired by Steve Wozniak's SWEET16  
 If you want to assemble [src/VIRTUAL16.asm](src/VIRTUAL16.asm) file you can use [naken_asm](https://github.com/mikeakohn/naken_asm) or another 6502 assembler.  
-For assembling your own VIRTUAL16 code go to [here](https://nullmember.github.io/VIRTUAL16/customasm/), scroll to end of page and write your program there. Make sure you selected "Comma-seperated Hex" option (it's default). Press assemble and place bytes to your 6502 program. Don't forget to prepend 'DB' each line.  
+For assembling your own VIRTUAL16 code go to [here](https://nullmember.github.io/customasm/web/), scroll to end of page and write your program there. Make sure you selected "Comma-seperated Hex" option (it's default). Press assemble and place bytes to your 6502 program. Don't forget to prepend 'DB' each line.  
 
 ## Example
 
