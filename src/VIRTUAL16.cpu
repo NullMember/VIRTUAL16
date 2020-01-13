@@ -160,6 +160,48 @@
 		assert(reladdr >= !0x7f)
 		0xF @ dst[3:0] @ reladdr[7:0]
 	}
+	BNM1 {label}		->
+	{
+		reladdr = label - pc - 2
+		assert(reladdr <=  0x7f)
+		assert(reladdr >= !0x7f)
+		0xAD @ reladdr[7:0]
+	}
+	BM1	 {label}		->
+	{
+		reladdr = label - pc - 2
+		assert(reladdr <=  0x7f)
+		assert(reladdr >= !0x7f)
+		0xBD @ reladdr[7:0]
+	}
+	BMI	 {label}		->
+	{
+		reladdr = label - pc - 2
+		assert(reladdr <=  0x7f)
+		assert(reladdr >= !0x7f)
+		0xCD @ reladdr[7:0]
+	}
+	BPL	 {label}		->
+	{
+		reladdr = label - pc - 2
+		assert(reladdr <=  0x7f)
+		assert(reladdr >= !0x7f)
+		0xDD @ reladdr[7:0]
+	}
+	BNE	 {label}		->
+	{
+		reladdr = label - pc - 2
+		assert(reladdr <=  0x7f)
+		assert(reladdr >= !0x7f)
+		0xED @ reladdr[7:0]
+	}
+	BEQ	 {label}		->
+	{
+		reladdr = label - pc - 2
+		assert(reladdr <=  0x7f)
+		assert(reladdr >= !0x7f)
+		0xFD @ reladdr[7:0]
+	}
 }
 
 ;Write your code below here

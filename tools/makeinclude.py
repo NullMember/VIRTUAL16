@@ -16,7 +16,7 @@ for line in lines:
         if line.split()[0] in instructions:
             _index = instructions.index(line.split()[0])
             address = int(line.split()[1], 16)
-            addresses.append('.equ ' + names[_index] + ' ' + hex(address))
+            addresses.append(names[_index] + ' equ ' + hex(address))
     except:
         pass
 
