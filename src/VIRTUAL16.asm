@@ -1,4 +1,4 @@
-; Copyright (c) 2019 Malik Enes Şafak
+; Copyright (c) 2020 Malik Enes Şafak
 ;
 ; Permission is hereby granted, free of charge, to any person obtaining
 ; a copy of this software and associated documentation files (the
@@ -330,14 +330,11 @@ INSPUSH:
     RTS
 
 INSCMP:             ;SUB GIVEN REGISTERS AND STORE RESULT IN R13
-    LDA LB,Y
-    PHA
-    LDA HB,Y
-    LDY #CR
-    STA HB,Y
-    PLA
-    STA LB,Y
-                    ;EXECUTE INSSUB
+    STY TEMP        ;STORE Y TO TEMP
+    LDY #CR         ;Rd = CR
+    JSR INSMOVRR    ;MOVE Rs TO CR
+    LDY TEMP        ;RESTORE Y, EXECUTE INSSUB
+    LDX #CR
 INSSUB:             ;IF INSTRUCTION IS SUB WITHOUT BORROW
     SEC             ;SET CARRY (CLEAR BORROW)
 INSSBC:             ;IF INSTRUCTION IS SUB WITH BORROW 
@@ -684,6 +681,26 @@ INSSEC:
     SEC
     JMP INSNOP
 
+INSMOVHH:
+    LDA HB,X
+    STA HB,Y
+    RTS
+
+INSMOVHL:
+    LDA HB,X
+    STA LB,Y
+    RTS
+
+INSMOVLH:
+    LDA LB,X
+    STA HB,Y
+    RTS
+
+INSMOVLL:
+    LDA LB,X
+    STA LB,Y
+    RTS
+
 INSTR:
     DW INSRET-1   ;0x00
     DW INSMOVRR-1 ;0x01
@@ -691,16 +708,17 @@ INSTR:
     DW INSMOVRM-1 ;0x03
     DW INSMOVMRI-1;0x04
     DW INSMOVRMI-1;0x05
-    DW INSPUSH-1  ;0x06
-    DW INSPOP-1   ;0x07
-    DW INSCMP-1   ;0x08
-    DW INSSWAP-1  ;0x09
-    DW INSAND-1   ;0x0A
-    DW INSOR-1    ;0x0B
-    DW INSXOR-1   ;0x0C
-    DW INSJSR-1   ;0x0D
-    DW INSRTS-1   ;0x0E
-    DW INSJMP-1   ;0x0F
+    DW INSMOVHH-1 ;0x06
+    DW INSMOVHL-1 ;0x07
+    DW INSMOVLH-1 ;0x08
+    DW INSMOVLL-1 ;0x09
+    DW INSSWAP-1  ;0x0A
+    DW INSJSR-1   ;0x0B
+    DW INSNJSR-1  ;0x0C
+    DW INSJMPR-1  ;0x0D
+    DW INSJMP-1   ;0x0E
+    DW INSRTS-1   ;0x0F
+
     DW INSINC-1   ;0x10
     DW INSDEC-1   ;0x11
     DW INSADD-1   ;0x12
@@ -709,7 +727,7 @@ INSTR:
     DW INSSBC-1   ;0x15
     DW INSSMUL-1  ;0x16
     DW INSUMUL-1  ;0x17
-    DW INSNJSR-1  ;0x18
+    DW INSCMP-1   ;0x18
     DW INSASR-1   ;0x19
     DW INSLSL-1   ;0x1A
     DW INSLSR-1   ;0x1B
@@ -717,12 +735,18 @@ INSTR:
     DW INSRLC-1   ;0x1D
     DW INSROR-1   ;0x1E
     DW INSRRC-1   ;0x1F
+
     DW INSBCC-1   ;0x20
     DW INSBCS-1   ;0x21
     DW INSBRA-1   ;0x22
-    DW INSJMPR-1  ;0x23
-    DW INSCLC-1   ;0x24
-    DW INSSEC-1   ;0x25
+    DW INSAND-1   ;0x23
+    DW INSOR-1    ;0x24
+    DW INSXOR-1   ;0x25
+    DW INSCLC-1   ;0x26
+    DW INSSEC-1   ;0x27
+    DW INSPUSH-1  ;0x28
+    DW INSPOP-1   ;0x29
+
 INSTR2:
     DW INSMOVL-1  ;0x50
     DW INSMOVH-1  ;0x60

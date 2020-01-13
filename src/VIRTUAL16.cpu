@@ -1,4 +1,4 @@
-; Copyright (c) 2019 Malik Enes Şafak
+; Copyright (c) 2020 Malik Enes Şafak
 ;
 ; Permission is hereby granted, free of charge, to any person obtaining
 ; a copy of this software and associated documentation files (the
@@ -54,28 +54,29 @@
 	MOV	 {src: reg}, @{dst: reg}	-> 0x03 @ src[3:0] @ dst[3:0]
 	MOV  +@{src: reg}, {dst: reg}	-> 0x04 @ src[3:0] @ dst[3:0]
 	MOV  {src: reg}, +@{dst: reg}	-> 0x05 @ src[3:0] @ dst[3:0]
-	PUSH {reg: reg}					-> 0x06 @ reg[3:0] @ 0[3:0]
-	POP  {reg: reg}					-> 0x07 @ reg[3:0] @ 0[3:0]
-	CMP  {reg: reg}, {dst: reg}		-> 0x08 @ reg[3:0] @ dst[3:0]
-	SWAP {src: reg}, {dst: reg} 	-> 0x09 @ src[3:0] @ dst[3:0]
-	SWAP {reg: reg}		 			-> 0x09 @ reg[3:0] @ reg[3:0]
-	AND  {src: reg}, {dst: reg}		-> 0x0A @ src[3:0] @ dst[3:0]
-	OR   {src: reg}, {dst: reg}		-> 0x0B @ src[3:0] @ dst[3:0]
-	XOR  {src: reg}, {dst: reg}		-> 0x0C @ src[3:0] @ dst[3:0]
-	JSR	 {label}					-> 0x0D @ label[7:0] @ label[15:8]
-	RTS								-> 0x0E
-	JMP	 {label}					-> 0x0F @ label[7:0] @ label[15:8]
+	MOV  {src: reg}.H, {dst: reg}.H	-> 0x06 @ src[3:0] @ dst[3:0]
+	MOV  {src: reg}.H, {dst: reg}.L	-> 0x07 @ src[3:0] @ dst[3:0]
+	MOV  {src: reg}.L, {dst: reg}.H	-> 0x08 @ src[3:0] @ dst[3:0]
+	MOV  {src: reg}.L, {dst: reg}.L	-> 0x09 @ src[3:0] @ dst[3:0]
+	SWAP {src: reg}, {dst: reg} 	-> 0x0A @ src[3:0] @ dst[3:0]
+	SWAP {reg: reg}		 			-> 0x0A @ reg[3:0] @ reg[3:0]
+	JSR	 {label}					-> 0x0B @ label[7:0] @ label[15:8]
+	NJSR {label}					-> 0x0C @ label[7:0] @ label[15:8]
+	JMPR {reg: reg}					-> 0x0D @ reg[3:0] @ 15[3:0]
+	JMP	 {label}					-> 0x0E @ label[7:0] @ label[15:8]
+	RTS								-> 0x0F
+
 	INC  {dst: reg}, #{count}		-> 0x10 @ dst[3:0] @ count[3:0]
 	INC  {dst: reg}					-> 0x10 @ dst[3:0] @ 0[3:0]
 	DEC  {dst: reg}, #{count}		-> 0x11 @ dst[3:0] @ count[3:0]
 	DEC  {dst: reg}					-> 0x11 @ dst[3:0] @ 0[3:0]
-	ADD  {src: reg}, {dst: reg}		-> 0x12 @ src[3:0] @ dst[3:0]
-	ADC  {src: reg}, {dst: reg}		-> 0x13 @ src[3:0] @ dst[3:0]
-	SUB  {src: reg}, {dst: reg}		-> 0x14 @ src[3:0] @ dst[3:0]
-	SBC  {src: reg}, {dst: reg}		-> 0x15 @ src[3:0] @ dst[3:0]
-	SMUL {src: reg}, {dst: reg}		-> 0x16 @ src[3:0] @ dst[3:0]
-	UMUL {src: reg}, {dst: reg}		-> 0x17 @ src[3:0] @ dst[3:0]
-	NJSR {label}					-> 0x18 @ label[7:0] @ label[15:8]
+	ADD  {dst: reg}, {src: reg}		-> 0x12 @ dst[3:0] @ src[3:0]
+	ADC  {dst: reg}, {src: reg}		-> 0x13 @ dst[3:0] @ src[3:0]
+	SUB  {dst: reg}, {src: reg}		-> 0x14 @ dst[3:0] @ src[3:0]
+	SBC  {dst: reg}, {src: reg}		-> 0x15 @ dst[3:0] @ src[3:0]
+	SMUL {dst: reg}, {src: reg}		-> 0x16 @ dst[3:0] @ src[3:0]
+	UMUL {dst: reg}, {src: reg}		-> 0x17 @ dst[3:0] @ src[3:0]
+	CMP  {dst: reg}, {src: reg}		-> 0x18 @ dst[3:0] @ src[3:0]
 	ASR  {dst: reg}, #{count}		-> 0x19 @ dst[3:0] @ count[3:0]
 	ASR  {dst: reg}					-> 0x19 @ dst[3:0] @ 0[3:0]
 	LSL  {dst: reg}, #{count}		-> 0x1A @ dst[3:0] @ count[3:0]
@@ -90,6 +91,7 @@
 	ROR  {dst: reg}					-> 0x1E @ dst[3:0] @ 0[3:0]
 	RRC  {dst: reg}, #{count}		-> 0x1F @ dst[3:0] @ count[3:0]
 	RRC  {dst: reg}					-> 0x1F @ dst[3:0] @ 0[3:0]
+
 	BCC	{label}						->
 	{
 		reladdr = label - pc - 2
@@ -111,14 +113,19 @@
 		assert(reladdr >= !0x7f)
 		0x22 @ reladdr[7:0]
 	}
-	JMPR {reg: reg}					-> 0x23 @ reg[3:0] @ 15[3:0]
-	CLC								-> 0x24
-	SEC								-> 0x25
-	MOVL #{value}, {dst: reg}		-> 0x5	@ dst[3:0] @ value[7:0]
-	MOVH #{value}, {dst: reg}		-> 0x6	@ dst[3:0] @ value[7:0]
+	AND  {src: reg}, {dst: reg}		-> 0x23 @ src[3:0] @ dst[3:0]
+	OR   {src: reg}, {dst: reg}		-> 0x24 @ src[3:0] @ dst[3:0]
+	XOR  {src: reg}, {dst: reg}		-> 0x25 @ src[3:0] @ dst[3:0]
+	CLC								-> 0x26
+	SEC								-> 0x27
+	PUSH {reg: reg}					-> 0x28 @ reg[3:0] @ 0[3:0]
+	POP  {reg: reg}					-> 0x29 @ reg[3:0] @ 0[3:0]
+
+	MOV  #{value}, {dst: reg}.L		-> 0x5	@ dst[3:0] @ value[7:0]
+	MOV  #{value}, {dst: reg}.H		-> 0x6	@ dst[3:0] @ value[7:0]
 	MOV  #{value}, {dst: reg}		-> 0x7	@ dst[3:0] @ value[7:0] @ value[15:8]
-	MOV	{label}, {reg: reg}			-> 0x8 @ reg[3:0] @ label[7:0] @ label[15:8]
-	MOV	{reg: reg}, {label}			-> 0x9 @ reg[3:0] @ label[7:0] @ label[15:8]
+	MOV	 {label}, {reg: reg}		-> 0x8  @ reg[3:0] @ label[7:0] @ label[15:8]
+	MOV	 {reg: reg}, {label}		-> 0x9  @ reg[3:0] @ label[7:0] @ label[15:8]
 	BNM1 {dst: reg}, {label}		->
 	{
 		reladdr = label - pc - 2
