@@ -112,6 +112,8 @@
 		0x22 @ reladdr[7:0]
 	}
 	JMPR {reg: reg}					-> 0x23 @ reg[3:0] @ 15[3:0]
+	CLC								-> 0x24
+	SEC								-> 0x25
 	MOVL #{value}, {dst: reg}		-> 0x5	@ dst[3:0] @ value[7:0]
 	MOVH #{value}, {dst: reg}		-> 0x6	@ dst[3:0] @ value[7:0]
 	MOV  #{value}, {dst: reg}		-> 0x7	@ dst[3:0] @ value[7:0] @ value[15:8]
