@@ -113,9 +113,9 @@
 		assert(reladdr >= !0x7f)
 		0x22 @ reladdr[7:0]
 	}
-	AND  {src: reg}, {dst: reg}		-> 0x23 @ src[3:0] @ dst[3:0]
-	OR   {src: reg}, {dst: reg}		-> 0x24 @ src[3:0] @ dst[3:0]
-	XOR  {src: reg}, {dst: reg}		-> 0x25 @ src[3:0] @ dst[3:0]
+	AND  {dst: reg}, {src: reg}		-> 0x23 @ dst[3:0] @ src[3:0]
+	OR   {dst: reg}, {src: reg}		-> 0x24 @ dst[3:0] @ src[3:0]
+	XOR  {dst: reg}, {src: reg}		-> 0x25 @ dst[3:0] @ src[3:0]
 	CLC								-> 0x26
 	SEC								-> 0x27
 	PUSH {reg: reg}					-> 0x28 @ reg[3:0] @ 0[3:0]
