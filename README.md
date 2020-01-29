@@ -31,6 +31,8 @@ You can use VIRTUAL16 instructions as native subroutines. Because of fetch and d
     ADC16: ZP,y = ZP,x + ZP,y + Carry
     SUB16: ZP,y = ZP,x - ZP,y
     SBC16: ZP,y = ZP,x - ZP,y - !Carry
+    INC16: ZP,x = ZP,x + Acc
+    DEC16, ZP,x = ZP,x - Acc
     SWAP16: ZP,y = ZP,x / ZP,x = ZP,y
     SWAP16: ZP,x[0:7] = ZP,x[8:15] / ZP,x[8:15] = ZP,x[0:7]
     UMUL16: 0x18:0x19:0x1A:0x1B = ZP,x * ZP,y (unsigned)

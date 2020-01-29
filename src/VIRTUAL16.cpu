@@ -41,8 +41,8 @@
         R13 = 13
         R14 = 14
         R15 = 15
-        ML = 11
-        MH = 12
+        ML = 12
+        MH = 13
         CR = 13
         SR = 14
         PC = 15
@@ -77,6 +77,7 @@
 	SMUL {dst: reg}, {src: reg}		-> 0x16 @ dst[3:0] @ src[3:0]
 	UMUL {dst: reg}, {src: reg}		-> 0x17 @ dst[3:0] @ src[3:0]
 	CMP  {dst: reg}, {src: reg}		-> 0x18 @ dst[3:0] @ src[3:0]
+	CMP  {dst: reg}					-> 0x18 @ dst[3:0] @ 13[3:0]
 	ASR  {dst: reg}, #{count}		-> 0x19 @ dst[3:0] @ count[3:0]
 	ASR  {dst: reg}					-> 0x19 @ dst[3:0] @ 0[3:0]
 	LSL  {dst: reg}, #{count}		-> 0x1A @ dst[3:0] @ count[3:0]
@@ -168,42 +169,42 @@
 		assert(reladdr >= !0x7f)
 		0xF @ dst[3:0] @ reladdr[7:0]
 	}
-	BNM1 {label}		->
+	BNM1 {label}					->
 	{
 		reladdr = label - pc - 2
 		assert(reladdr <=  0x7f)
 		assert(reladdr >= !0x7f)
 		0xAD @ reladdr[7:0]
 	}
-	BM1	 {label}		->
+	BM1	 {label}					->
 	{
 		reladdr = label - pc - 2
 		assert(reladdr <=  0x7f)
 		assert(reladdr >= !0x7f)
 		0xBD @ reladdr[7:0]
 	}
-	BMI	 {label}		->
+	BMI	 {label}					->
 	{
 		reladdr = label - pc - 2
 		assert(reladdr <=  0x7f)
 		assert(reladdr >= !0x7f)
 		0xCD @ reladdr[7:0]
 	}
-	BPL	 {label}		->
+	BPL	 {label}					->
 	{
 		reladdr = label - pc - 2
 		assert(reladdr <=  0x7f)
 		assert(reladdr >= !0x7f)
 		0xDD @ reladdr[7:0]
 	}
-	BNE	 {label}		->
+	BNE	 {label}					->
 	{
 		reladdr = label - pc - 2
 		assert(reladdr <=  0x7f)
 		assert(reladdr >= !0x7f)
 		0xED @ reladdr[7:0]
 	}
-	BEQ	 {label}		->
+	BEQ	 {label}					->
 	{
 		reladdr = label - pc - 2
 		assert(reladdr <=  0x7f)
