@@ -605,6 +605,7 @@ INSINC:
     INY             ;MAP 0-15 TO 1-16
     TYA             ;TRANSFER IT TO ACC
 INSINCREMENT:
+    CLC
     ADC LB,X        ;ADD INCREMENT VALUE TO LSB
     STA LB,X        ;STORE IT
     LDA #0x00       ;IF THERE IS CARRY
