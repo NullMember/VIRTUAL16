@@ -20,204 +20,226 @@
 ; WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 #cpudef
-{
-    #bits 8
-	
-	#tokendef reg
+; Copyright (c) 2020 Malik Enes Şafak
+;
+; Permission is hereby granted, free of charge, to any person obtaining
+; a copy of this software and associated documentation files (the
+; "Software"), to deal in the Software without restriction, including
+; without limitation the rights to use, copy, modify, merge, publish,
+; distribute, sublicense, and/or sell copies of the Software, and to
+; permit persons to whom the Software is furnished to do so, subject to
+; the following conditions:
+;
+; The above copyright notice and this permission notice shall be
+; included in all copies or substantial portions of the Software.
+;
+; THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+; EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+; MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+; NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
+; LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
+; OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
+; WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+#bits 8
+
+#subruledef reg
     {
-        R0 = 0
-        R1 = 1
-        R2 = 2
-        R3 = 3
-        R4 = 4
-        R5 = 5
-        R6 = 6
-        R7 = 7
-        R8 = 8
-        R9 = 9
-        R10 = 10
-        R11 = 11
-        R12 = 12
-        R13 = 13
-        R14 = 14
-        R15 = 15
-        ML = 12
-        MH = 13
-        CR = 13
-        SR = 14
-        PC = 15
+        R0 => 0x00
+        R1 => 0x01
+        R2 => 0x02
+        R3 => 0x03
+        R4 => 0x04
+        R5 => 0x05
+        R6 => 0x06
+        R7 => 0x07
+        R8 => 0x08
+        R9 => 0x09
+        R10 => 0x0A
+        R11 => 0x0B
+        R12 => 0x0C
+        R13 => 0x0D
+        R14 => 0x0E
+        R15 => 0x0F
+        ML => 0x0C
+        MH => 0x0D
+        CR => 0x0D
+        SR => 0x0E
+        PC => 0x0F
     }
+
+#ruledef
+{
+	RET								=> 0x00
+	RTS								=> 0x01
+	CLC								=> 0x02
+	SEC								=> 0x03
+
+	MOV  {src: reg}, {dst: reg}		=> 0x04 @ src`4 @ dst`4
+	MOV  @{src: reg}, {dst: reg}	=> 0x05 @ src`4 @ dst`4
+	MOV	 {src: reg}, @{dst: reg}	=> 0x06 @ src`4 @ dst`4
+	MOV  +@{src: reg}, {dst: reg}	=> 0x07 @ src`4 @ dst`4
+	MOV  {src: reg}, +@{dst: reg}	=> 0x08 @ src`4 @ dst`4
+	MOV  {src: reg}.H, {dst: reg}.H	=> 0x09 @ src`4 @ dst`4
+	MOV  {src: reg}.H, {dst: reg}.L	=> 0x0A @ src`4 @ dst`4
+	MOV  {src: reg}.L, {dst: reg}.H	=> 0x0B @ src`4 @ dst`4
+	MOV  {src: reg}.L, {dst: reg}.L	=> 0x0C @ src`4 @ dst`4
+	SWAP {src: reg}, {dst: reg} 	=> 0x0D @ src`4 @ dst`4
+	SWAP {reg: reg}		 			=> 0x0D @ reg`4 @ reg`4
+
+	AND  {dst: reg}, {src: reg}		=> 0x0E @ dst`4 @ src`4
+	OR   {dst: reg}, {src: reg}		=> 0x0F @ dst`4 @ src`4
+	XOR  {dst: reg}, {src: reg}		=> 0x10 @ dst`4 @ src`4
+
+	ADD  {dst: reg}, {src: reg}		=> 0x11 @ dst`4 @ src`4
+	ADC  {dst: reg}, {src: reg}		=> 0x12 @ dst`4 @ src`4
+	SUB  {dst: reg}, {src: reg}		=> 0x13 @ dst`4 @ src`4
+	SBC  {dst: reg}, {src: reg}		=> 0x14 @ dst`4 @ src`4
+	SMUL {dst: reg}, {src: reg}		=> 0x15 @ dst`4 @ src`4
+	UMUL {dst: reg}, {src: reg}		=> 0x16 @ dst`4 @ src`4
+
+	CMP  {dst: reg}, {src: reg}		=> 0x17 @ dst`4 @ src`4
+	CMP  {dst: reg}					=> 0x17 @ dst`4 @ 13`4
+
+	INC  {dst: reg}, #{count}		=> 0x18 @ dst`4 @ count`4
+	INC  {dst: reg}					=> 0x18 @ dst`4 @ 0`4
+	DEC  {dst: reg}, #{count}		=> 0x19 @ dst`4 @ count`4
+	DEC  {dst: reg}					=> 0x19 @ dst`4 @ 0`4
+
+	ASR  {dst: reg}, #{count}		=> 0x1A @ dst`4 @ count`4
+	ASR  {dst: reg}					=> 0x1A @ dst`4 @ 0`4
+	LSL  {dst: reg}, #{count}		=> 0x1B @ dst`4 @ count`4
+	LSL  {dst: reg}					=> 0x1B @ dst`4 @ 0`4
+	LSR  {dst: reg}, #{count}		=> 0x1C @ dst`4 @ count`4
+	LSR  {dst: reg}					=> 0x1C @ dst`4 @ 0`4
+	ROL  {dst: reg}, #{count}		=> 0x1D @ dst`4 @ count`4
+	ROL  {dst: reg}					=> 0x1D @ dst`4 @ 0`4
+	RLC  {dst: reg}, #{count}		=> 0x1E @ dst`4 @ count`4
+	RLC  {dst: reg}					=> 0x1E @ dst`4 @ 0`4
+	ROR  {dst: reg}, #{count}		=> 0x1F @ dst`4 @ count`4
+	ROR  {dst: reg}					=> 0x1F @ dst`4 @ 0`4
+	RRC  {dst: reg}, #{count}		=> 0x20 @ dst`4 @ count`4
+	RRC  {dst: reg}					=> 0x20 @ dst`4 @ 0`4
+
+	JMPR {reg: reg}					=> 0x21 @ reg`4 @ 15`4
+
+	JSR	 {label}					=> 0x22 @ label[7:0] @ label[15:8]
+	NJSR {label}					=> 0x23 @ label[7:0] @ label[15:8]
+	JMP	 {label}					=> 0x24 @ label[7:0] @ label[15:8]
+
+	BCC	{label}						=>
+	{
+		reladdr = label - pc - 2
+		assert(reladdr <=  0x7f)
+		assert(reladdr >= !0x7f)
+		0x25 @ reladdr`8
+	}
+	BCS	{label}						=>
+	{
+		reladdr = label - pc - 2
+		assert(reladdr <=  0x7f)
+		assert(reladdr >= !0x7f)
+		0x26 @ reladdr`8
+	}
+	BRA	{label}						=>
+	{
+		reladdr = label - pc - 2
+		assert(reladdr <=  0x7f)
+		assert(reladdr >= !0x7f)
+		0x27 @ reladdr`8
+	}
 	
-	RET								-> 0x00
-	RTS								-> 0x01
-	CLC								-> 0x02
-	SEC								-> 0x03
-
-	MOV  {src: reg}, {dst: reg}		-> 0x04 @ src[3:0] @ dst[3:0]
-	MOV  @{src: reg}, {dst: reg}	-> 0x05 @ src[3:0] @ dst[3:0]
-	MOV	 {src: reg}, @{dst: reg}	-> 0x06 @ src[3:0] @ dst[3:0]
-	MOV  +@{src: reg}, {dst: reg}	-> 0x07 @ src[3:0] @ dst[3:0]
-	MOV  {src: reg}, +@{dst: reg}	-> 0x08 @ src[3:0] @ dst[3:0]
-	MOV  {src: reg}.H, {dst: reg}.H	-> 0x09 @ src[3:0] @ dst[3:0]
-	MOV  {src: reg}.H, {dst: reg}.L	-> 0x0A @ src[3:0] @ dst[3:0]
-	MOV  {src: reg}.L, {dst: reg}.H	-> 0x0B @ src[3:0] @ dst[3:0]
-	MOV  {src: reg}.L, {dst: reg}.L	-> 0x0C @ src[3:0] @ dst[3:0]
-	SWAP {src: reg}, {dst: reg} 	-> 0x0D @ src[3:0] @ dst[3:0]
-	SWAP {reg: reg}		 			-> 0x0D @ reg[3:0] @ reg[3:0]
-
-	AND  {dst: reg}, {src: reg}		-> 0x0E @ dst[3:0] @ src[3:0]
-	OR   {dst: reg}, {src: reg}		-> 0x0F @ dst[3:0] @ src[3:0]
-	XOR  {dst: reg}, {src: reg}		-> 0x10 @ dst[3:0] @ src[3:0]
-
-	ADD  {dst: reg}, {src: reg}		-> 0x11 @ dst[3:0] @ src[3:0]
-	ADC  {dst: reg}, {src: reg}		-> 0x12 @ dst[3:0] @ src[3:0]
-	SUB  {dst: reg}, {src: reg}		-> 0x13 @ dst[3:0] @ src[3:0]
-	SBC  {dst: reg}, {src: reg}		-> 0x14 @ dst[3:0] @ src[3:0]
-	SMUL {dst: reg}, {src: reg}		-> 0x15 @ dst[3:0] @ src[3:0]
-	UMUL {dst: reg}, {src: reg}		-> 0x16 @ dst[3:0] @ src[3:0]
-
-	CMP  {dst: reg}, {src: reg}		-> 0x17 @ dst[3:0] @ src[3:0]
-	CMP  {dst: reg}					-> 0x17 @ dst[3:0] @ 13[3:0]
-
-	INC  {dst: reg}, #{count}		-> 0x18 @ dst[3:0] @ count[3:0]
-	INC  {dst: reg}					-> 0x18 @ dst[3:0] @ 0[3:0]
-	DEC  {dst: reg}, #{count}		-> 0x19 @ dst[3:0] @ count[3:0]
-	DEC  {dst: reg}					-> 0x19 @ dst[3:0] @ 0[3:0]
-
-	ASR  {dst: reg}, #{count}		-> 0x1A @ dst[3:0] @ count[3:0]
-	ASR  {dst: reg}					-> 0x1A @ dst[3:0] @ 0[3:0]
-	LSL  {dst: reg}, #{count}		-> 0x1B @ dst[3:0] @ count[3:0]
-	LSL  {dst: reg}					-> 0x1B @ dst[3:0] @ 0[3:0]
-	LSR  {dst: reg}, #{count}		-> 0x1C @ dst[3:0] @ count[3:0]
-	LSR  {dst: reg}					-> 0x1C @ dst[3:0] @ 0[3:0]
-	ROL  {dst: reg}, #{count}		-> 0x1D @ dst[3:0] @ count[3:0]
-	ROL  {dst: reg}					-> 0x1D @ dst[3:0] @ 0[3:0]
-	RLC  {dst: reg}, #{count}		-> 0x1E @ dst[3:0] @ count[3:0]
-	RLC  {dst: reg}					-> 0x1E @ dst[3:0] @ 0[3:0]
-	ROR  {dst: reg}, #{count}		-> 0x1F @ dst[3:0] @ count[3:0]
-	ROR  {dst: reg}					-> 0x1F @ dst[3:0] @ 0[3:0]
-	RRC  {dst: reg}, #{count}		-> 0x20 @ dst[3:0] @ count[3:0]
-	RRC  {dst: reg}					-> 0x20 @ dst[3:0] @ 0[3:0]
-
-	JMPR {reg: reg}					-> 0x21 @ reg[3:0] @ 15[3:0]
-
-	JSR	 {label}					-> 0x22 @ label[7:0] @ label[15:8]
-	NJSR {label}					-> 0x23 @ label[7:0] @ label[15:8]
-	JMP	 {label}					-> 0x24 @ label[7:0] @ label[15:8]
-
-	BCC	{label}						->
-	{
-		reladdr = label - pc - 2
-		assert(reladdr <=  0x7f)
-		assert(reladdr >= !0x7f)
-		0x25 @ reladdr[7:0]
-	}
-	BCS	{label}						->
-	{
-		reladdr = label - pc - 2
-		assert(reladdr <=  0x7f)
-		assert(reladdr >= !0x7f)
-		0x26 @ reladdr[7:0]
-	}
-	BRA	{label}						->
-	{
-		reladdr = label - pc - 2
-		assert(reladdr <=  0x7f)
-		assert(reladdr >= !0x7f)
-		0x27 @ reladdr[7:0]
-	}
 	
-	
-	PUSH {reg: reg}					-> 0x3  @ reg[3:0]
-	POP  {reg: reg}					-> 0x4  @ reg[3:0]
-	MOV  #{value}, {dst: reg}.L		-> 0x5	@ dst[3:0] @ value[7:0]
-	MOV  #{value}, {dst: reg}.H		-> 0x6	@ dst[3:0] @ value[7:0]
-	MOV  #{value}, {dst: reg}		-> 0x7	@ dst[3:0] @ value[7:0] @ value[15:8]
-	MOV	 {label}, {reg: reg}		-> 0x8  @ reg[3:0] @ label[7:0] @ label[15:8]
-	MOV	 {reg: reg}, {label}		-> 0x9  @ reg[3:0] @ label[7:0] @ label[15:8]
-	BNM1 {dst: reg}, {label}		->
+	PUSH {reg: reg}					=> 0x3  @ reg`4
+	POP  {reg: reg}					=> 0x4  @ reg`4
+	MOV  #{value}, {dst: reg}.L		=> 0x5	@ dst`4 @ value`8
+	MOV  #{value}, {dst: reg}.H		=> 0x6	@ dst`4 @ value`8
+	MOV  #{value}, {dst: reg}		=> 0x7	@ dst`4 @ value[7:0] @ value[15:8]
+	MOV	 {label}, {reg: reg}		=> 0x8  @ reg`4 @ label[7:0] @ label[15:8]
+	MOV	 {reg: reg}, {label}		=> 0x9  @ reg`4 @ label[7:0] @ label[15:8]
+	BNM1 {dst: reg}, {label}		=>
 	{
 		reladdr = label - pc - 2
 		assert(reladdr <=  0x7f)
 		assert(reladdr >= !0x7f)
-		0xA @ dst[3:0] @ reladdr[7:0]
+		0xA @ dst`4 @ reladdr`8
 	}
-	BM1	 {dst: reg}, {label}		->
+	BM1	 {dst: reg}, {label}		=>
 	{
 		reladdr = label - pc - 2
 		assert(reladdr <=  0x7f)
 		assert(reladdr >= !0x7f)
-		0xB @ dst[3:0] @ reladdr[7:0]
+		0xB @ dst`4 @ reladdr`8
 	}
-	BMI	 {dst: reg}, {label}		->
+	BMI	 {dst: reg}, {label}		=>
 	{
 		reladdr = label - pc - 2
 		assert(reladdr <=  0x7f)
 		assert(reladdr >= !0x7f)
-		0xC @ dst[3:0] @ reladdr[7:0]
+		0xC @ dst`4 @ reladdr`8
 	}
-	BPL	 {dst: reg}, {label}		->
+	BPL	 {dst: reg}, {label}		=>
 	{
 		reladdr = label - pc - 2
 		assert(reladdr <=  0x7f)
 		assert(reladdr >= !0x7f)
-		0xD @ dst[3:0] @ reladdr[7:0]
+		0xD @ dst`4 @ reladdr`8
 	}
-	BNE	 {dst: reg}, {label}		->
+	BNE	 {dst: reg}, {label}		=>
 	{
 		reladdr = label - pc - 2
 		assert(reladdr <=  0x7f)
 		assert(reladdr >= !0x7f)
-		0xE @ dst[3:0] @ reladdr[7:0]
+		0xE @ dst`4 @ reladdr`8
 	}
-	BEQ	 {dst: reg}, {label}		->
+	BEQ	 {dst: reg}, {label}		=>
 	{
 		reladdr = label - pc - 2
 		assert(reladdr <=  0x7f)
 		assert(reladdr >= !0x7f)
-		0xF @ dst[3:0] @ reladdr[7:0]
+		0xF @ dst`4 @ reladdr`8
 	}
-	BNM1 {label}					->
+	BNM1 {label}					=>
 	{
 		reladdr = label - pc - 2
 		assert(reladdr <=  0x7f)
 		assert(reladdr >= !0x7f)
-		0xAD @ reladdr[7:0]
+		0xAD @ reladdr`8
 	}
-	BM1	 {label}					->
+	BM1	 {label}					=>
 	{
 		reladdr = label - pc - 2
 		assert(reladdr <=  0x7f)
 		assert(reladdr >= !0x7f)
-		0xBD @ reladdr[7:0]
+		0xBD @ reladdr`8
 	}
-	BMI	 {label}					->
+	BMI	 {label}					=>
 	{
 		reladdr = label - pc - 2
 		assert(reladdr <=  0x7f)
 		assert(reladdr >= !0x7f)
-		0xCD @ reladdr[7:0]
+		0xCD @ reladdr`8
 	}
-	BPL	 {label}					->
+	BPL	 {label}					=>
 	{
 		reladdr = label - pc - 2
 		assert(reladdr <=  0x7f)
 		assert(reladdr >= !0x7f)
-		0xDD @ reladdr[7:0]
+		0xDD @ reladdr`8
 	}
-	BNE	 {label}					->
+	BNE	 {label}					=>
 	{
 		reladdr = label - pc - 2
 		assert(reladdr <=  0x7f)
 		assert(reladdr >= !0x7f)
-		0xED @ reladdr[7:0]
+		0xED @ reladdr`8
 	}
-	BEQ	 {label}					->
+	BEQ	 {label}					=>
 	{
 		reladdr = label - pc - 2
 		assert(reladdr <=  0x7f)
 		assert(reladdr >= !0x7f)
-		0xFD @ reladdr[7:0]
+		0xFD @ reladdr`8
 	}
 }
 
