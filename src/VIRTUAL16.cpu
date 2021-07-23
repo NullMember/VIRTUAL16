@@ -63,62 +63,69 @@
 	RTS								=> 0x01
 	CLC								=> 0x02
 	SEC								=> 0x03
+	
+	JSRL {label: u16}				=> 0x04 @ le(label)
+	JMPL {label: u16}				=> 0x05 @ le(label)
+	JSRA {addr: u16}				=> 0x06 @ le(addr)
+	JMPA {addr: u16}				=> 0x07 @ le(addr)
+	NJSR {addr: u16}				=> 0x08 @ le(addr)
 
-	MOV  {src: reg}, {dst: reg}		=> 0x04 @ src`4 @ dst`4
-	MOV  @{src: reg}, {dst: reg}	=> 0x05 @ src`4 @ dst`4
-	MOV  {src: reg}, @{dst: reg}	=> 0x06 @ src`4 @ dst`4
-	MOV  +@{src: reg}, {dst: reg}	=> 0x07 @ src`4 @ dst`4
-	MOV  {src: reg}, +@{dst: reg}	=> 0x08 @ src`4 @ dst`4
-	MOV  {src: reg}.H, {dst: reg}.H	=> 0x09 @ src`4 @ dst`4
-	MOV  {src: reg}.H, {dst: reg}.L	=> 0x0A @ src`4 @ dst`4
-	MOV  {src: reg}.L, {dst: reg}.H	=> 0x0B @ src`4 @ dst`4
-	MOV  {src: reg}.L, {dst: reg}.L	=> 0x0C @ src`4 @ dst`4
-	SWAP {src: reg}, {dst: reg} 	=> 0x0D @ src`4 @ dst`4
-	SWAP {reg: reg}		 			=> 0x0D @ reg`4 @ reg`4
+	BCC	{label: reladdr}			=> 0x09 @ label
+	BCS	{label: reladdr}			=> 0x0A @ label
+	BRA	{label: reladdr}			=> 0x0B @ label
+	
+	PSHA							=> 0x0C
+	POPA							=> 0x0D
 
-	AND  {src: reg}, {dst: reg}		=> 0x0E @ src`4 @ dst`4
-	OR   {src: reg}, {dst: reg}		=> 0x0F @ src`4 @ dst`4
-	XOR  {src: reg}, {dst: reg}		=> 0x10 @ src`4 @ dst`4
+	MOV  {src: reg}, {dst: reg}		=> 0x0E @ src`4 @ dst`4
+	MOV  @{src: reg}, {dst: reg}	=> 0x0F @ src`4 @ dst`4
+	MOV  {src: reg}, @{dst: reg}	=> 0x10 @ src`4 @ dst`4
+	MOV  +@{src: reg}, {dst: reg}	=> 0x11 @ src`4 @ dst`4
+	MOV  {src: reg}, +@{dst: reg}	=> 0x12 @ src`4 @ dst`4
+	MOV  {src: reg}.H, {dst: reg}.H	=> 0x13 @ src`4 @ dst`4
+	MOV  {src: reg}.H, {dst: reg}.L	=> 0x14 @ src`4 @ dst`4
+	MOV  {src: reg}.L, {dst: reg}.H	=> 0x15 @ src`4 @ dst`4
+	MOV  {src: reg}.L, {dst: reg}.L	=> 0x16 @ src`4 @ dst`4
+	SWAP {src: reg}, {dst: reg} 	=> 0x17 @ src`4 @ dst`4
+	SWAP {reg: reg}		 			=> 0x17 @ reg`4 @ reg`4
 
-	ADD  {src: reg}, {dst: reg}		=> 0x11 @ src`4 @ dst`4
-	ADC  {src: reg}, {dst: reg}		=> 0x12 @ src`4 @ dst`4
-	SUB  {src: reg}, {dst: reg}		=> 0x13 @ src`4 @ dst`4
-	SBC  {src: reg}, {dst: reg}		=> 0x14 @ src`4 @ dst`4
-	SMUL {src: reg}, {dst: reg}		=> 0x15 @ src`4 @ dst`4
-	UMUL {src: reg}, {dst: reg}		=> 0x16 @ src`4 @ dst`4
+	AND  {src: reg}, {dst: reg}		=> 0x18 @ src`4 @ dst`4
+	OR   {src: reg}, {dst: reg}		=> 0x19 @ src`4 @ dst`4
+	XOR  {src: reg}, {dst: reg}		=> 0x1A @ src`4 @ dst`4
 
-	CMP  {src: reg}, {dst: reg}		=> 0x17 @ src`4 @ dst`4
-	CMP  {src: reg}					=> 0x17 @ src`4 @ 13`4
+	ADD  {src: reg}, {dst: reg}		=> 0x1B @ src`4 @ dst`4
+	ADC  {src: reg}, {dst: reg}		=> 0x1C @ src`4 @ dst`4
+	SUB  {src: reg}, {dst: reg}		=> 0x1D @ src`4 @ dst`4
+	SBC  {src: reg}, {dst: reg}		=> 0x1E @ src`4 @ dst`4
+	SMUL {src: reg}, {dst: reg}		=> 0x1F @ src`4 @ dst`4
+	UMUL {src: reg}, {dst: reg}		=> 0x20 @ src`4 @ dst`4
 
-	INC  {dst: reg}, {count: u4}	=> 0x18 @ dst`4 @ count`4
-	INC  {dst: reg}					=> 0x18 @ dst`4 @ 0`4
-	DEC  {dst: reg}, {count: u4}	=> 0x19 @ dst`4 @ count`4
-	DEC  {dst: reg}					=> 0x19 @ dst`4 @ 0`4
+	CMP  {src: reg}, {dst: reg}		=> 0x21 @ src`4 @ dst`4
+	CMP  {dst: reg}					=> 0x21 @ 13`4 @ dst`4
 
-	ASR  {dst: reg}, {count: u4}	=> 0x1A @ dst`4 @ count`4
-	ASR  {dst: reg}					=> 0x1A @ dst`4 @ 0`4
-	LSL  {dst: reg}, {count: u4}	=> 0x1B @ dst`4 @ count`4
-	LSL  {dst: reg}					=> 0x1B @ dst`4 @ 0`4
-	LSR  {dst: reg}, {count: u4}	=> 0x1C @ dst`4 @ count`4
-	LSR  {dst: reg}					=> 0x1C @ dst`4 @ 0`4
-	ROL  {dst: reg}, {count: u4}	=> 0x1D @ dst`4 @ count`4
-	ROL  {dst: reg}					=> 0x1D @ dst`4 @ 0`4
-	RLC  {dst: reg}, {count: u4}	=> 0x1E @ dst`4 @ count`4
-	RLC  {dst: reg}					=> 0x1E @ dst`4 @ 0`4
-	ROR  {dst: reg}, {count: u4}	=> 0x1F @ dst`4 @ count`4
-	ROR  {dst: reg}					=> 0x1F @ dst`4 @ 0`4
-	RRC  {dst: reg}, {count: u4}	=> 0x20 @ dst`4 @ count`4
-	RRC  {dst: reg}					=> 0x20 @ dst`4 @ 0`4
+	INC  {dst: reg}, {count: u4}	=> 0x22 @ dst`4 @ count`4
+	INC  {dst: reg}					=> 0x22 @ dst`4 @ 0`4
+	DEC  {dst: reg}, {count: u4}	=> 0x23 @ dst`4 @ count`4
+	DEC  {dst: reg}					=> 0x23 @ dst`4 @ 0`4
 
-	JMPR {reg: reg}					=> 0x21 @ reg`4 @ 15`4
+	ASR  {dst: reg}, {count: u4}	=> 0x24 @ dst`4 @ count`4
+	ASR  {dst: reg}					=> 0x24 @ dst`4 @ 0`4
+	LSL  {dst: reg}, {count: u4}	=> 0x25 @ dst`4 @ count`4
+	LSL  {dst: reg}					=> 0x25 @ dst`4 @ 0`4
+	LSR  {dst: reg}, {count: u4}	=> 0x26 @ dst`4 @ count`4
+	LSR  {dst: reg}					=> 0x26 @ dst`4 @ 0`4
+	ROL  {dst: reg}, {count: u4}	=> 0x27 @ dst`4 @ count`4
+	ROL  {dst: reg}					=> 0x27 @ dst`4 @ 0`4
+	RLC  {dst: reg}, {count: u4}	=> 0x28 @ dst`4 @ count`4
+	RLC  {dst: reg}					=> 0x28 @ dst`4 @ 0`4
+	ROR  {dst: reg}, {count: u4}	=> 0x29 @ dst`4 @ count`4
+	ROR  {dst: reg}					=> 0x29 @ dst`4 @ 0`4
+	RRC  {dst: reg}, {count: u4}	=> 0x2A @ dst`4 @ count`4
+	RRC  {dst: reg}					=> 0x2A @ dst`4 @ 0`4
 
-	JSR	 {addr: u16}				=> 0x22 @ le(addr)
-	NJSR {addr: u16}				=> 0x23 @ le(addr)
-	JMP	 {addr: u16}				=> 0x24 @ le(addr)
-
-	BCC	{label: reladdr}			=> 0x25 @ label
-	BCS	{label: reladdr}			=> 0x26 @ label
-	BRA	{label: reladdr}			=> 0x27 @ label
+	JMPR {reg: reg}					=> 0x2B @ reg`4 @ 15`4
+	
+	NOP								=> 0x2F
 	
 	PUSH {reg: reg}					=> 0x3  @ reg`4
 	POP  {reg: reg}					=> 0x4  @ reg`4
